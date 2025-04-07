@@ -60,12 +60,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>org.mule.modules</groupId>
-			<artifactId>mule-apikit-module</artifactId>
-			<version>1.11.3</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
 			<groupId>com.mulesoft.modules</groupId>
 			<artifactId>mule-secure-configuration-property-module</artifactId>
 			<version>1.2.7</version>
@@ -73,10 +67,22 @@
 		</dependency>
 		<dependency>
 			<groupId>69f300d3-91e0-4b6b-a1f5-8ea4f765d901</groupId>
-			<artifactId>starter_project_raml</artifactId>
-			<version>1.0.0</version>
+			<artifactId>solo_exp_events</artifactId>
+			<version>1.0.4</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-apikit-module</artifactId>
+			<version>1.11.5</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-validation-module</artifactId>
+			<version>2.0.7</version>
+			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>
 

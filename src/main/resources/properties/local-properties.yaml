@@ -1,9 +1,11 @@
 https:
-  port: "8081"
+  port: "8080"
   
 api:
   basePath: "/api/v1"
   
-database:
-  user: "toto"
-  password: "${secure::database.password}"
+process-tracks:
+  basePath: "/api/v1"
+  port: "8083"
+  host: "localhost"
+  protocol: "HTTP"

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="postEvent" doc:id="43a70370-bde1-4578-9fc8-fc42c937da70" >
+		<http:request method="POST" doc:name="to process" doc:id="17da9d09-daf1-4553-91ad-0bfd460cd8a5" config-ref="ProcessRequestConfig" path="/events"/>
+	</sub-flow>
+</mule>

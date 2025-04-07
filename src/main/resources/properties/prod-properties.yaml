@@ -1,11 +1,8 @@
 https:
-  port: "8081"
+  port: "8080"
   
 api:
   basePath: "/api/v1"
-  name: "${artifactId}-${mule.env}"
-  version: "${version}"
   
-database:
-  user: "toto"
-  password: "${secure::database.password}"
+process-tracks:
+  port: "8083"

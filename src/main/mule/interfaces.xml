@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<flow name="get:\heartbeat:Router" doc:id="1dc42250-85dc-49b7-bedd-2f18bca09b5a" >
 		<logger level="INFO" doc:name="Start heartbeat flow" doc:id="e8fad0ad-9c74-4b66-8856-3dcd8de700ed" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="${app.name}" />
 		<ee:transform doc:name="Transform Message" doc:id="ff9324a5-fce2-49a6-a4f4-0552a7563506" >
@@ -20,5 +21,38 @@ output application/json
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="End heartbeat flow" doc:id="3ad5a638-a540-49bb-8dfa-980f86231b1e" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="solo-exp-events" />
+	</flow>
+	<flow name="get:\events\(date):Router" doc:id="3bae6c91-b47f-4570-b125-162077ff768e" >
+		<logger level="INFO" doc:name="Start flow" doc:id="26628549-b83b-4b2d-9cd9-3f42240957b5" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="${app.name}" />
+		<ee:transform doc:name="Transform Message" doc:id="f6421588-0570-473c-a948-4a8fee5da574" >
+			<ee:variables >
+				<ee:set-variable variableName="date" ><![CDATA[attributes.uriParams.'date']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message1" doc:id="1b457af5-bb3e-4aaf-b039-aad0e4fefbc1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"firstname,lastname,email,genres \"John\",\"Doe\",\"john@example.com\",\"pop, rap\" \"Jane\",\"Smith\",\"jane@example.com\",\"pop, funk\"" as String {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End flow" doc:id="f01fae99-0d6c-4898-a9ab-54969b250770" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="solo-exp-events" />
+	</flow>
+	<flow name="post:\events:multipart\form-data:Router" doc:id="b4078581-1dec-44cf-b673-7848cb2f7c7b" >
+		<logger level="INFO" doc:name="Start flow" doc:id="deaa4937-bc1e-4ccf-be59-b82bb4315f57" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="${app.name}" />
+		<validation:is-true doc:name="validator date" doc:id="4a08996b-e8b7-443c-9b64-01255942eb33" expression="#[import try from dw::Runtime output application/json fun isValidDate(dateStr: String): Boolean = do { try(() -&gt; dateStr as Date).success } --- isValidDate(payload.parts.fileName.content)]"/>
+		<flow-ref doc:name="postEvent" doc:id="7218e609-c790-4408-a4ec-d6f067f2c297" name="postEvent"/>
+		<ee:transform doc:name="Transform Message" doc:id="491ad946-a8ad-49dd-95e5-7d1715a637c9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  message: "Events succesfully created."
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End flow" doc:id="055c029b-82a0-4ddd-8fb5-0d1d423dcdee" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="solo-exp-events" />
 	</flow>
 </mule>
