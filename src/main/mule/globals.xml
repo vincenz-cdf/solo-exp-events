@@ -17,4 +17,7 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	<http:request-config name="ProcessRequestConfig" doc:name="HTTP Request configuration" doc:id="c12f02b2-4a71-4657-b7f3-d5bef4177439" basePath="${process-tracks.basePath}" >
 		<http:request-connection host="${process-tracks.host}" port="${process-tracks.port}" protocol="${process-tracks.protocol}"/>
 	</http:request-config>
+	<http:request-config name="SFTPRequestConfig" doc:name="HTTP Request configuration" doc:id="0d6c9eba-9ebd-43a7-8726-fec2eb7ed9ed" basePath="${sftp.basePath}" >
+		<http:request-connection protocol="${sftp.protocol}" host="${sftp.host}" port="${sftp.port}" />
+	</http:request-config>
 </mule>

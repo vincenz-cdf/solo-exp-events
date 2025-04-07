@@ -9,3 +9,9 @@ process-tracks:
   port: "8083"
   host: "localhost"
   protocol: "HTTP"
+  
+sftp:
+  protocol: "HTTP"
+  host: "localhost"
+  port: "8082"
+  basePath: "/api/v1" 
