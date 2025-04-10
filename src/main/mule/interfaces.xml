@@ -34,13 +34,15 @@ output application/json
 		</http:request>
 		<logger level="INFO" doc:name="End flow" doc:id="f01fae99-0d6c-4898-a9ab-54969b250770" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="solo-exp-events" />
 	</flow>
-	<flow name="post:\events:multipart\form-data:Router" doc:id="b4078581-1dec-44cf-b673-7848cb2f7c7b" >
+	<flow name="post:\events:multipart\form-data:Router" doc:id="b4078581-1dec-44cf-b673-7848cb2f7c7b">
 		<logger level="INFO" doc:name="Start flow" doc:id="deaa4937-bc1e-4ccf-be59-b82bb4315f57" message='#[import prettifyFlowName from modules::ToolBox&#10;---&#10;{&#10;	step:"Start $(prettifyFlowName(flow.name)) flow",&#10;	data: {}&#10;}]' category="${app.name}" />
-		<validation:is-true doc:name="validator date" doc:id="4a08996b-e8b7-443c-9b64-01255942eb33" expression="#[import try from dw::Runtime output application/json fun isValidDate(dateStr: String): Boolean = do { try(() -&gt; dateStr as Date).success } --- isValidDate(payload.parts.fileName.content)]"/>
-		<flow-ref doc:name="postEvent" doc:id="7218e609-c790-4408-a4ec-d6f067f2c297" name="postEvent"/>
-		<ee:transform doc:name="Transform Message" doc:id="491ad946-a8ad-49dd-95e5-7d1715a637c9" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<validation:is-true doc:name="validator sendDate" doc:id="4a08996b-e8b7-443c-9b64-01255942eb33" expression="#[import try from dw::Runtime output application/json fun isValidDate(dateStr: String): Boolean = do { try(() -&gt; dateStr as Date).success } --- isValidDate(payload.parts.sendDate.content)]" />
+		<set-variable value="#[payload.parts.sendDate.content]" doc:name="[sendDate]" doc:id="46c0451c-70a6-4da0-8d4a-d1f528cd5a51" variableName="sendDate" />
+		<validation:is-true doc:name="validator eventDate" doc:id="aa23c149-bfcf-4d8e-9650-c5184611ae53" expression="#[import try from dw::Runtime fun isValidDate(dateStr: String, sendDateStr: String): Boolean = do { var dateValid = try(() -&gt; dateStr as Date).success var eventDate = dateStr as Date var sendDate = sendDateStr as Date --- if (dateValid) dateValid and (eventDate &gt;= sendDate) else false } output application/json --- isValidDate(payload.parts.eventDate.content, vars.sendDate)]" />
+		<flow-ref doc:name="postEvent" doc:id="7218e609-c790-4408-a4ec-d6f067f2c297" name="postEvent" />
+		<ee:transform doc:name="Sucessful message" doc:id="491ad946-a8ad-49dd-95e5-7d1715a637c9">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
