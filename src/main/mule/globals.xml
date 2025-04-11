@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
-http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="265702c5-0971-4cab-9095-17e6d6fb8c39" basePath="${api.basePath}" >
 		<http:listener-connection host="0.0.0.0" port="${https.port}" />
 	</http:listener-config>
@@ -16,8 +17,17 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	<configuration-properties doc:name="Configuration properties" doc:id="e1184ea1-9784-446e-bee4-37f498a93ed2" file="properties/common-properties.yaml" />
 	<http:request-config name="ProcessRequestConfig" doc:name="HTTP Request configuration" doc:id="c12f02b2-4a71-4657-b7f3-d5bef4177439" basePath="${process-tracks.basePath}" >
 		<http:request-connection host="${process-tracks.host}" port="${process-tracks.port}" protocol="${process-tracks.protocol}"/>
+		<http:default-headers >
+			<http:default-header key="client_id" value="${authorizations.client_id}" />
+			<http:default-header key="client_secret" value="${authorizations.client_secret}" />
+		</http:default-headers>
 	</http:request-config>
-	<http:request-config name="SFTPRequestConfig" doc:name="HTTP Request configuration" doc:id="0d6c9eba-9ebd-43a7-8726-fec2eb7ed9ed" basePath="${sftp.basePath}" >
+	<http:request-config name="SFTPRequestConfig" doc:name="HTTP Request configuration" doc:id="0d6c9eba-9ebd-43a7-8726-fec2eb7ed9ed" basePath="${sftp.basePath}" responseTimeout="30000">
 		<http:request-connection protocol="${sftp.protocol}" host="${sftp.host}" port="${sftp.port}" />
+		<http:default-headers >
+			<http:default-header key="client_id" value="${authorizations.client_id}" />
+			<http:default-header key="client_secret" value="${authorizations.client_secret}" />
+		</http:default-headers>
 	</http:request-config>
+	<api-gateway:autodiscovery apiId="${api.autodiscovery}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="05a41616-d42c-4a62-bce8-734b20a83d9d" flowRef="solo_exp_events-main" />
 </mule>

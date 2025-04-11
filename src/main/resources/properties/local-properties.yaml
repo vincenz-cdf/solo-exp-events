@@ -3,6 +3,11 @@ https:
   
 api:
   basePath: "/api/v1"
+  autodiscovery: "0000"
+  
+authorizations:
+  client_id: ""
+  client_secret: ""
   
 process-tracks:
   basePath: "/api/v1"
